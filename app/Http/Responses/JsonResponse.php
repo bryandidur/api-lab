@@ -18,7 +18,7 @@ class JsonResponse extends BaseJsonResponse
      */
     public function __construct(?array $data = [], int $status = Response::HTTP_OK, array $headers = [], int $options = 0)
     {
-        parent::__construct($this->handleData($data), $this->handleStatusCode($data, $status), $headers, $options);
+        parent::__construct($data, $this->handleStatusCode($data, $status), $headers, $options);
     }
 
     /**
@@ -29,17 +29,6 @@ class JsonResponse extends BaseJsonResponse
     public static function make(?array $data = [], int $status = Response::HTTP_OK, array $headers = [], int $options = 0)
     {
         return new self($data, $status, $headers, $options);
-    }
-
-    /**
-     * Handle the response data.
-     *
-     * @param  array  $data
-     * @return array
-     */
-    public function handleData(?array $data): array
-    {
-        return compact('data');
     }
 
     /**
