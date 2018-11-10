@@ -2,29 +2,36 @@
 
 namespace App\Services;
 
-use App\Validations\UserValidation;
 use App\Repositories\UserRepository;
+use App\Validators\UserValidator;
 
 class UserService
 {
-    use UserValidation;
-
     /**
      * The user repository.
      *
      * @var App\Repositories\UserRepository
      */
-    private $repository;
+    protected $repository;
+
+    /**
+     * The user validator
+     *
+     * @var App\Validators\UserValidator
+     */
+    protected $validator;
 
     /**
      * Create a new service instance.
      *
      * @param  App\Repositories\UserRepository $repository
+     * @param  App\Validators\UserValidator $validator
      * @return void
      */
-    public function __construct(UserRepository $repository)
+    public function __construct(UserRepository $repository, UserValidator $validator)
     {
         $this->repository = $repository;
+        $this->validator = $validator;
     }
 
     /**
@@ -45,7 +52,7 @@ class UserService
      */
     public function store(array $data): array
     {
-        $this->validateStorage($data);
+        $this->validator->store($data);
 
         return $this->repository->store($data);
     }
@@ -70,7 +77,7 @@ class UserService
      */
     public function update(int $id, array $data): ?array
     {
-        $this->validateUpdate($id, $data);
+        $this->validator->update($data, compact('id'));
 
         return $this->repository->update($id, $data);
     }
